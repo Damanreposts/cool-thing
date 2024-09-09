@@ -5,8 +5,8 @@ ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 -- Create the main frame for the UI
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 300, 0, 500)
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -250)
+MainFrame.Size = UDim2.new(0, 350, 0, 500) -- Increased width to accommodate drag space
+MainFrame.Position = UDim2.new(0.5, -175, 0.5, -250)
 MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 MainFrame.BorderSizePixel = 0
 MainFrame.Parent = ScreenGui
@@ -16,9 +16,17 @@ local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
--- Make the frame draggable
+-- Create the draggable space (right side of the buttons)
+local DragArea = Instance.new("Frame")
+DragArea.Size = UDim2.new(0, 70, 1, 0) -- 70 pixels wide, full height
+DragArea.Position = UDim2.new(1, -70, 0, 0) -- Positioned on the right side
+DragArea.BackgroundTransparency = 1 -- Invisible
+DragArea.Parent = MainFrame
+
+-- Make the main frame draggable using the drag area
+DragArea.Active = true
+DragArea.Draggable = true
 MainFrame.Active = true
-MainFrame.Draggable = true
 
 -- Helper function to create buttons
 local function createButton(name, text, position, callback)
@@ -120,3 +128,23 @@ createButton("ServerhopButton", "Serverhop", UDim2.new(0, 10, 0, 190), serverHop
 createButton("TigerButton", "Tiger", UDim2.new(0, 10, 0, 250), executeTigerScript)
 createButton("ResetButton", "Reset", UDim2.new(0, 10, 0, 310), resetCharacter)
 createButton("GodModeButton", "God Mode", UDim2.new(0, 10, 0, 370), godMode)
+
+-- Create the Open/Close button outside the main frame
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Text = "Open/Close"
+ToggleButton.Size = UDim2.new(0, 100, 0, 50)
+ToggleButton.Position = UDim2.new(0, 10, 0, 10)  -- Adjust position as needed
+ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
+ToggleButton.Parent = ScreenGui
+
+-- Toggle visibility of the MainFrame
+local guiVisible = true
+
+ToggleButton.MouseButton1Click:Connect(function()
+    guiVisible = not guiVisible
+    MainFrame.Visible = guiVisible
+end)
+
