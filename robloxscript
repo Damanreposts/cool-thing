@@ -1,0 +1,99 @@
+-- Create the main screen GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "TeleportNoclipGUI"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create the main frame for the UI
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 300, 0, 400)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -200)
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BorderSizePixel = 0
+MainFrame.Parent = ScreenGui
+
+-- Add UICorner for rounded edges
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.Parent = MainFrame
+
+-- Make the frame draggable
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+-- Helper function to create buttons
+local function createButton(name, text, position, callback)
+    local Button = Instance.new("TextButton")
+    Button.Name = name
+    Button.Text = text
+    Button.Size = UDim2.new(0, 280, 0, 50)
+    Button.Position = position
+    Button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Button.BorderColor3 = Color3.fromRGB(255, 0, 0)
+    Button.Parent = MainFrame
+
+    Button.MouseButton1Click:Connect(callback)
+end
+
+-- Noclip Toggle Function
+local noclipEnabled = false
+local noclipConnection
+
+local function toggleNoclip()
+    noclipEnabled = not noclipEnabled
+    if noclipEnabled then
+        noclipConnection = game:GetService("RunService").Stepped:Connect(function()
+            for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end)
+    else
+        if noclipConnection then
+            noclipConnection:Disconnect()
+            noclipConnection = nil
+        end
+        -- Re-enable collision
+        for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = true
+            end
+        end
+    end
+end
+
+-- TextBox for Player Name
+local PlayerNameBox = Instance.new("TextBox")
+PlayerNameBox.PlaceholderText = "Enter player name"
+PlayerNameBox.Size = UDim2.new(0, 280, 0, 50)
+PlayerNameBox.Position = UDim2.new(0, 10, 0, 70)
+PlayerNameBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+PlayerNameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+PlayerNameBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
+PlayerNameBox.Parent = MainFrame
+
+-- Teleport Function
+local function teleportToPlayer()
+    local playerName = PlayerNameBox.Text
+    local targetPlayer = game.Players:FindFirstChild(playerName)
+
+    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        local targetPos = targetPlayer.Character.HumanoidRootPart.Position
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(targetPos)
+    else
+        warn("Player not found or not valid for teleport.")
+    end
+end
+
+-- Serverhop Function
+local function serverHop()
+    local TeleportService = game:GetService("TeleportService")
+    local PlaceId = game.PlaceId
+    TeleportService:Teleport(PlaceId)
+end
+
+-- Creating buttons with the specified actions
+createButton("NoclipButton", "Noclip", UDim2.new(0, 10, 0, 10), toggleNoclip)
+createButton("TeleportToButton", "Teleport To", UDim2.new(0, 10, 0, 130), teleportToPlayer)
+createButton("ServerhopButton", "Serverhop", UDim2.new(0, 10, 0, 190), serverHop)
