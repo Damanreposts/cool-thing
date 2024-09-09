@@ -1,39 +1,33 @@
-
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "TeleportNoclipGUI"
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 350, 0, 400)  -- Adjusted size to allow for scrolling
+MainFrame.Size = UDim2.new(0, 350, 0, 400)
 MainFrame.Position = UDim2.new(0.5, -175, 0.5, -200)
 MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 MainFrame.BorderSizePixel = 0
 MainFrame.Parent = ScreenGui
 MainFrame.Active = true
-MainFrame.Draggable = true -- Allow the main frame to be dragged
-
+MainFrame.Draggable = true
 
 local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
-
 local ScrollingFrame = Instance.new("ScrollingFrame")
 ScrollingFrame.Size = UDim2.new(1, 0, 1, 0)
-ScrollingFrame.CanvasSize = UDim2.new(0, 0, 3, 0) -- Adjust CanvasSize for more scrolling area
+ScrollingFrame.CanvasSize = UDim2.new(0, 0, 3, 0)
 ScrollingFrame.ScrollBarThickness = 8
 ScrollingFrame.Position = UDim2.new(0, 0, 0, 0)
 ScrollingFrame.BackgroundTransparency = 1
 ScrollingFrame.Parent = MainFrame
 
-
 local DragArea = Instance.new("Frame")
-DragArea.Size = UDim2.new(0, 70, 1, 0) -- 70 pixels wide, full height
-DragArea.Position = UDim2.new(1, -70, 0, 0) -- Positioned on the right side
+DragArea.Size = UDim2.new(0, 70, 1, 0)
+DragArea.Position = UDim2.new(1, -70, 0, 0) 
 DragArea.BackgroundTransparency = 1 -- Invisible
 DragArea.Parent = MainFrame
-
 
 local function createButton(name, text, position, callback)
     local Button = Instance.new("TextButton")
@@ -48,7 +42,6 @@ local function createButton(name, text, position, callback)
 
     Button.MouseButton1Click:Connect(callback)
 end
-
 
 local noclipEnabled = false
 local noclipConnection
@@ -77,7 +70,6 @@ local function toggleNoclip()
     end
 end
 
-
 local PlayerNameBox = Instance.new("TextBox")
 PlayerNameBox.PlaceholderText = "Enter player name"
 PlayerNameBox.Size = UDim2.new(0, 280, 0, 50)
@@ -87,7 +79,6 @@ PlayerNameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 PlayerNameBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
 PlayerNameBox.Parent = ScrollingFrame
 
-
 local function teleportToPlayer()
     local playerName = PlayerNameBox.Text
     local targetPlayer = game.Players:FindFirstChild(playerName)
@@ -96,10 +87,9 @@ local function teleportToPlayer()
         local targetPos = targetPlayer.Character.HumanoidRootPart.Position
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(targetPos)
     else
-        warn("Player not found or not valid for teleport.")
+        warn("player not found.")
     end
 end
-
 
 local function serverHop()
     local TeleportService = game:GetService("TeleportService")
@@ -107,16 +97,39 @@ local function serverHop()
     TeleportService:Teleport(PlaceId)
 end
 
-
 local function executeTigerScript()
     loadstring(game:HttpGet("https://scriptblox.com/raw/Prison-Lif..."))()
 end
 
+local function healPlayer()
+    local character = game.Players.LocalPlayer.Character
+    if character and character:FindFirstChildOfClass("Humanoid") then
+        character:FindFirstChildOfClass("Humanoid").Health = character:FindFirstChildOfClass("Humanoid").MaxHealth
+    end
+end
+
+local function killAllPlayers()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+            player.Character:FindFirstChildOfClass("Humanoid").Health = 0
+        end
+    end
+end
+
+local gravityEnabled = true
+
+local function toggleGravity()
+    gravityEnabled = not gravityEnabled
+    if gravityEnabled then
+        game.Workspace.Gravity = 196.2
+    else
+        game.Workspace.Gravity = 0
+    end
+end
 
 local function resetCharacter()
     game.Players.LocalPlayer.Character:BreakJoints()
 end
-
 
 local function godMode()
     local character = game.Players.LocalPlayer.Character
@@ -127,19 +140,21 @@ local function godMode()
     end
 end
 
-
 createButton("NoclipButton", "Noclip", UDim2.new(0, 10, 0, 10), toggleNoclip)
 createButton("TeleportToButton", "Teleport To", UDim2.new(0, 10, 0, 130), teleportToPlayer)
 createButton("ServerhopButton", "Serverhop", UDim2.new(0, 10, 0, 190), serverHop)
 createButton("TigerButton", "Tiger", UDim2.new(0, 10, 0, 250), executeTigerScript)
 createButton("ResetButton", "Reset", UDim2.new(0, 10, 0, 310), resetCharacter)
 createButton("GodModeButton", "God Mode", UDim2.new(0, 10, 0, 370), godMode)
+createButton("HealButton", "Heal", UDim2.new(0, 10, 0, 430), healPlayer)
+createButton("KillAllButton", "Kill All", UDim2.new(0, 10, 0, 490), killAllPlayers)
+createButton("ZeroGravityButton", "Zero Gravity", UDim2.new(0, 10, 0, 550), toggleGravity)
 
 local ToggleButton = Instance.new("TextButton")
 ToggleButton.Name = "ToggleButton"
 ToggleButton.Text = "Open/Close"
 ToggleButton.Size = UDim2.new(0, 100, 0, 50)
-ToggleButton.Position = UDim2.new(0, 10, 0, 10)  -- Adjust position as needed
+ToggleButton.Position = UDim2.new(0, 10, 0, 10)
 ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
@@ -152,5 +167,3 @@ ToggleButton.MouseButton1Click:Connect(function()
     guiVisible = not guiVisible
     MainFrame.Visible = guiVisible
 end)
-
-
