@@ -5,28 +5,34 @@ ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 -- Create the main frame for the UI
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 350, 0, 500) -- Increased width to accommodate drag space
-MainFrame.Position = UDim2.new(0.5, -175, 0.5, -250)
+MainFrame.Size = UDim2.new(0, 350, 0, 400)  -- Adjusted size to allow for scrolling
+MainFrame.Position = UDim2.new(0.5, -175, 0.5, -200)
 MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 MainFrame.BorderSizePixel = 0
 MainFrame.Parent = ScreenGui
+MainFrame.Active = true
+MainFrame.Draggable = true -- Allow the main frame to be dragged
 
 -- Add UICorner for rounded edges
 local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
--- Create the draggable space (right side of the buttons)
+-- Create the ScrollingFrame to hold the buttons
+local ScrollingFrame = Instance.new("ScrollingFrame")
+ScrollingFrame.Size = UDim2.new(1, 0, 1, 0)
+ScrollingFrame.CanvasSize = UDim2.new(0, 0, 3, 0) -- Adjust CanvasSize for more scrolling area
+ScrollingFrame.ScrollBarThickness = 8
+ScrollingFrame.Position = UDim2.new(0, 0, 0, 0)
+ScrollingFrame.BackgroundTransparency = 1
+ScrollingFrame.Parent = MainFrame
+
+-- Create the draggable space on the right side of the buttons
 local DragArea = Instance.new("Frame")
 DragArea.Size = UDim2.new(0, 70, 1, 0) -- 70 pixels wide, full height
 DragArea.Position = UDim2.new(1, -70, 0, 0) -- Positioned on the right side
 DragArea.BackgroundTransparency = 1 -- Invisible
 DragArea.Parent = MainFrame
-
--- Make the main frame draggable using the drag area
-DragArea.Active = true
-DragArea.Draggable = true
-MainFrame.Active = true
 
 -- Helper function to create buttons
 local function createButton(name, text, position, callback)
@@ -38,7 +44,7 @@ local function createButton(name, text, position, callback)
     Button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
     Button.BorderColor3 = Color3.fromRGB(255, 0, 0)
-    Button.Parent = MainFrame
+    Button.Parent = ScrollingFrame
 
     Button.MouseButton1Click:Connect(callback)
 end
@@ -79,7 +85,7 @@ PlayerNameBox.Position = UDim2.new(0, 10, 0, 70)
 PlayerNameBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 PlayerNameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 PlayerNameBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
-PlayerNameBox.Parent = MainFrame
+PlayerNameBox.Parent = ScrollingFrame
 
 -- Teleport Function
 local function teleportToPlayer()
@@ -147,4 +153,5 @@ ToggleButton.MouseButton1Click:Connect(function()
     guiVisible = not guiVisible
     MainFrame.Visible = guiVisible
 end)
+
 
