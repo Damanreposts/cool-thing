@@ -1,9 +1,9 @@
--- Create the main screen GUI
+
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "TeleportNoclipGUI"
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- Create the main frame for the UI
+
 local MainFrame = Instance.new("Frame")
 MainFrame.Size = UDim2.new(0, 350, 0, 400)  -- Adjusted size to allow for scrolling
 MainFrame.Position = UDim2.new(0.5, -175, 0.5, -200)
@@ -13,12 +13,12 @@ MainFrame.Parent = ScreenGui
 MainFrame.Active = true
 MainFrame.Draggable = true -- Allow the main frame to be dragged
 
--- Add UICorner for rounded edges
+
 local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
--- Create the ScrollingFrame to hold the buttons
+
 local ScrollingFrame = Instance.new("ScrollingFrame")
 ScrollingFrame.Size = UDim2.new(1, 0, 1, 0)
 ScrollingFrame.CanvasSize = UDim2.new(0, 0, 3, 0) -- Adjust CanvasSize for more scrolling area
@@ -27,14 +27,14 @@ ScrollingFrame.Position = UDim2.new(0, 0, 0, 0)
 ScrollingFrame.BackgroundTransparency = 1
 ScrollingFrame.Parent = MainFrame
 
--- Create the draggable space on the right side of the buttons
+
 local DragArea = Instance.new("Frame")
 DragArea.Size = UDim2.new(0, 70, 1, 0) -- 70 pixels wide, full height
 DragArea.Position = UDim2.new(1, -70, 0, 0) -- Positioned on the right side
 DragArea.BackgroundTransparency = 1 -- Invisible
 DragArea.Parent = MainFrame
 
--- Helper function to create buttons
+
 local function createButton(name, text, position, callback)
     local Button = Instance.new("TextButton")
     Button.Name = name
@@ -49,7 +49,7 @@ local function createButton(name, text, position, callback)
     Button.MouseButton1Click:Connect(callback)
 end
 
--- Noclip Toggle Function
+
 local noclipEnabled = false
 local noclipConnection
 
@@ -77,7 +77,7 @@ local function toggleNoclip()
     end
 end
 
--- TextBox for Player Name
+
 local PlayerNameBox = Instance.new("TextBox")
 PlayerNameBox.PlaceholderText = "Enter player name"
 PlayerNameBox.Size = UDim2.new(0, 280, 0, 50)
@@ -87,7 +87,7 @@ PlayerNameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 PlayerNameBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
 PlayerNameBox.Parent = ScrollingFrame
 
--- Teleport Function
+
 local function teleportToPlayer()
     local playerName = PlayerNameBox.Text
     local targetPlayer = game.Players:FindFirstChild(playerName)
@@ -100,24 +100,24 @@ local function teleportToPlayer()
     end
 end
 
--- Serverhop Function
+
 local function serverHop()
     local TeleportService = game:GetService("TeleportService")
     local PlaceId = game.PlaceId
     TeleportService:Teleport(PlaceId)
 end
 
--- Tiger Script Function
+
 local function executeTigerScript()
     loadstring(game:HttpGet("https://scriptblox.com/raw/Prison-Lif..."))()
 end
 
--- Reset Function
+
 local function resetCharacter()
     game.Players.LocalPlayer.Character:BreakJoints()
 end
 
--- God Mode Function
+
 local function godMode()
     local character = game.Players.LocalPlayer.Character
     if character and character:FindFirstChildOfClass("Humanoid") then
@@ -127,7 +127,7 @@ local function godMode()
     end
 end
 
--- Creating buttons with the specified actions
+
 createButton("NoclipButton", "Noclip", UDim2.new(0, 10, 0, 10), toggleNoclip)
 createButton("TeleportToButton", "Teleport To", UDim2.new(0, 10, 0, 130), teleportToPlayer)
 createButton("ServerhopButton", "Serverhop", UDim2.new(0, 10, 0, 190), serverHop)
@@ -135,7 +135,6 @@ createButton("TigerButton", "Tiger", UDim2.new(0, 10, 0, 250), executeTigerScrip
 createButton("ResetButton", "Reset", UDim2.new(0, 10, 0, 310), resetCharacter)
 createButton("GodModeButton", "God Mode", UDim2.new(0, 10, 0, 370), godMode)
 
--- Create the Open/Close button outside the main frame
 local ToggleButton = Instance.new("TextButton")
 ToggleButton.Name = "ToggleButton"
 ToggleButton.Text = "Open/Close"
@@ -146,7 +145,7 @@ ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
 ToggleButton.Parent = ScreenGui
 
--- Toggle visibility of the MainFrame
+
 local guiVisible = true
 
 ToggleButton.MouseButton1Click:Connect(function()
