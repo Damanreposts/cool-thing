@@ -5,8 +5,8 @@ ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 -- Create the main frame for the UI
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 300, 0, 400)
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -200)
+MainFrame.Size = UDim2.new(0, 300, 0, 500)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -250)
 MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 MainFrame.BorderSizePixel = 0
 MainFrame.Parent = ScreenGui
@@ -93,7 +93,30 @@ local function serverHop()
     TeleportService:Teleport(PlaceId)
 end
 
+-- Tiger Script Function
+local function executeTigerScript()
+    loadstring(game:HttpGet("https://scriptblox.com/raw/Prison-Lif..."))()
+end
+
+-- Reset Function
+local function resetCharacter()
+    game.Players.LocalPlayer.Character:BreakJoints()
+end
+
+-- God Mode Function
+local function godMode()
+    local character = game.Players.LocalPlayer.Character
+    if character and character:FindFirstChildOfClass("Humanoid") then
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        humanoid.MaxHealth = math.huge
+        humanoid.Health = math.huge
+    end
+end
+
 -- Creating buttons with the specified actions
 createButton("NoclipButton", "Noclip", UDim2.new(0, 10, 0, 10), toggleNoclip)
 createButton("TeleportToButton", "Teleport To", UDim2.new(0, 10, 0, 130), teleportToPlayer)
 createButton("ServerhopButton", "Serverhop", UDim2.new(0, 10, 0, 190), serverHop)
+createButton("TigerButton", "Tiger", UDim2.new(0, 10, 0, 250), executeTigerScript)
+createButton("ResetButton", "Reset", UDim2.new(0, 10, 0, 310), resetCharacter)
+createButton("GodModeButton", "God Mode", UDim2.new(0, 10, 0, 370), godMode)
